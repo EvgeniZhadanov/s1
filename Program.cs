@@ -10,7 +10,7 @@ namespace Proba10
 {
     internal class Program
     {
-
+        //test
         static List<string> Way()
         {
             var list = new List<string>();  
@@ -63,7 +63,7 @@ Console.WriteLine("выберите изделие. 0 для выхода из �
                     {
                         Console.WriteLine($"Изделие: {Path.GetFileName(file)}\t");
                     }
-
+                            
                     var _number = Console.ReadLine();
                     
                     try
