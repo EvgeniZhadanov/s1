@@ -10,7 +10,6 @@ namespace Proba10
 {
     internal class Program
     {
-        //test
         static List<string> Way()
         {
             var list = new List<string>();  
