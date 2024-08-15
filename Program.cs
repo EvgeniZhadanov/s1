@@ -10,9 +10,11 @@ namespace Proba10
 {
     internal class Program
     {
-        static List<string> Way()
+        
+
+        static List<string> WayTxt()
         {
-            var list = new List<string>();  
+            var list = new List<string>();
             using (StreamReader path = new StreamReader("settings.txt"))
             {
                 using (StreamReader pathDirectory = new StreamReader(path.ReadLine()))
@@ -25,7 +27,7 @@ namespace Proba10
                     }
                 }
             }
-            return list;    
+            return list;
         }
 
         static List<Completings> Products(string stringPath)
@@ -40,11 +42,8 @@ namespace Proba10
                     {
                         var values = line.Split('\t');
 
-
                         Completings com = new Completings(values[0], Convert.ToDecimal(values[1]), Convert.ToDecimal(values[2]));
-
                         list.Add(com);
-
                     }
                 }
             }
@@ -53,9 +52,8 @@ namespace Proba10
 
         static void Main(string[] args)
         {
-            
-            
-            WayProduct stringWay = new WayProduct(Way());   
+                        
+            WayProduct stringWay = new WayProduct(WayTxt());   
 
 Console.WriteLine("выберите изделие. 0 для выхода из программы.");
                     foreach (var file in stringWay.wayproducts)
@@ -67,8 +65,7 @@ Console.WriteLine("выберите изделие. 0 для выхода из �
                     
                     try
                     {
-                    
-                    int number = int.Parse(_number);
+                                        int number = int.Parse(_number);
                 while (number != 0)
                 {
                     Products product = new Products(Products(stringWay.wayproducts[number - 1]));
