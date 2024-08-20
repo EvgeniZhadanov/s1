@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using static System.Net.WebRequestMethods;
+using OfficeOpenXml;
 
 namespace Proba10
 {
@@ -49,6 +50,36 @@ namespace Proba10
             }
             return list;
         }
+
+
+        static List<Completings> StreamExcel() // изменил метод
+        {
+            List<Completings> list = new List<Completings>();
+            FileInfo fileInfo = new FileInfo("Way()");
+            using (ExcelPackage package = new ExcelPackage(fileInfo))
+            {
+                var workSheets = package.Workbook.Worksheets;
+                foreach (var worksheet in workSheets)
+                {
+                    Console.WriteLine(@"изделие: {workSheet.Name}");
+                }
+                //int rowCount = worksheet.Dimension.Rows;
+                for (int i = 1; i <= workSheets.Count; i++)
+                {
+                    var sheet = package.Workbook.Worksheets[i];
+                    for (int j = 2; j <= sheet.Dimension.Rows; j++)
+                    {
+                        Completings comp = new Completings(
+                            sheet.Cells[j, 0].Value.ToString(),
+                            Convert.ToDecimal(sheet.Cells[j, 1].Value.ToString()),
+                            Convert.ToDecimal(sheet.Cells[j, 2].Value.ToString())
+);
+                    }    
+}
+            }
+            return list;
+        }
+
 
         static void Main(string[] args)
         {
