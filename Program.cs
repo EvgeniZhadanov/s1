@@ -59,14 +59,11 @@ namespace Proba10
             using (ExcelPackage package = new ExcelPackage(fileInfo))
             {
                 var workSheets = package.Workbook.Worksheets;
-                foreach (var worksheet in workSheets)
+                foreach (var sheet in workSheets)
                 {
                     Console.WriteLine(@"изделие: {workSheet.Name}");
-                }
-                //int rowCount = worksheet.Dimension.Rows;
-                for (int i = 1; i <= workSheets.Count; i++)
-                {
-                    var sheet = package.Workbook.Worksheets[i];
+
+
                     for (int j = 2; j <= sheet.Dimension.Rows; j++)
                     {
                         Completings comp = new Completings(
@@ -74,9 +71,9 @@ namespace Proba10
                             Convert.ToDecimal(sheet.Cells[j, 1].Value.ToString()),
                             Convert.ToDecimal(sheet.Cells[j, 2].Value.ToString())
 );
-                    }    
-}
-            }
+                    }
+                    }
+                }                              
             return list;
         }
 
