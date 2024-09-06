@@ -8,13 +8,8 @@ namespace Proba10
 {
     internal class Products
     {
-        public Products(List<Completings> _completing)
-        {
-            //name = _name;
-            completing = _completing;
-        }
-        //public string name;
-        public List<Completings> completing = new List<Completings>();
+        public string productName { set; get; }
+        public List<Completings> completing { set; get; }
 
 
         public decimal GetPrice()
