@@ -11,7 +11,7 @@ namespace Proba10
     {
 
         public string ProductName { set; get; }
-                public List<Component> components{ set; get; }
+        public List<Component> components = new List<Component>();
 
 
                 public decimal GetPrice()
