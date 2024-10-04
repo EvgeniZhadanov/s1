@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 //using static System.Net.WebRequestMethods;
 using OfficeOpenXml;
+using System.ComponentModel;
 
 namespace Proba10
 {
@@ -16,55 +17,76 @@ namespace Proba10
                 
                 static void Main(string[] args)
         {
-            Console.WriteLine("выбирите файл для чтения:\n 1 json 2 excel.");
-            string number = Console.ReadLine(); 
+            //создание папки для файлов, для считывания данных
+            string path = @"C:\Users\Евгений";
+            string subpath = @"с1\папка считывания данных для подсчёта";
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            if (!dirInfo.Exists)
+            {
+                dirInfo.Create();
+            }
+            dirInfo.CreateSubdirectory(subpath);
+            
+            //поиск в папке файла
+                DirectoryInfo directoryInfo = new DirectoryInfo(@"C:\Users\Евгений\с1\папка считывания данных для подсчёта");
+            FileInfo[] files = directoryInfo.GetFiles();
 
-            switch (number) {
-                case "1":
-                    string jsonFilePath = @"D:\izdeliya\json\изделия.json";
-                    string jsonData = File.ReadAllText(jsonFilePath);
+            string extension = String.Empty;
+            foreach (FileInfo file in files)
+            {
+                extension = file.Extension; //присваивание строке расширения файла
 
-                    List<Product> products = JsonConvert.DeserializeObject<List<Product>>(jsonData);
-
-                    foreach (Product product in products)
-                    {
-                        Console.WriteLine(
-                            $"Изделие: {product.ProductName} \n переменный расход: {product.GetPrice()}");
-                        foreach (var component in product.components)
-                        {
-                            Console.WriteLine($"комплектующие: {component.ComponentName}");
-                        }
-                    }
-                    break;
-                    case "2":
-
-                    using (var fileExcel = new ExcelPackage(new FileInfo(@"D:\izdeliya\excel\Книга1.xlsx")))
-                    {
+switch (extension)
+                {
+                    case ".json":
                         
-                        foreach (var sheet in fileExcel.Workbook.Worksheets)
+                        string jsonData = File.ReadAllText(file.FullName);
+
+                        List<Product> products = JsonConvert.DeserializeObject<List<Product>>(jsonData);
+
+                        foreach (Product product in products)
                         {
-                            Product product = new Product();
-                            product.ProductName = sheet.ToString();
-                            
-                            int start = 2;
-                            while (sheet.Cells[start, 1].Value != null)
-                            {
-                                Component component = new Component();
-
-                                component.ComponentName = sheet.Cells[start, 1].Text;
-                                component.ComponentCount = decimal.Parse(sheet.Cells[start, 2].Text);
-                                component.ComponentPrice = decimal.Parse(sheet.Cells[start, 3].Text);
-                                product.components.Add(component);
-
-                                start++;
-                            }
                             Console.WriteLine(
-                            $"Изделие: {product.ProductName} \n переменный расход: {product.GetPrice()}");
+                                $"Изделие: {product.ProductName} \n переменный расход: {product.GetPrice()}");
+                            foreach (var component in product.components)
+                            {
+                                Console.WriteLine($"комплектующие: {component.ComponentName}");
+                            }
+                        }
+                        break;
+                    case ".xlsx":
+
+                        using (var fileExcel = new ExcelPackage(new FileInfo(file.FullName)))
+                        {
+
+                            foreach (var sheet in fileExcel.Workbook.Worksheets)
+                            {
+                                Product product = new Product();
+                                product.ProductName = sheet.ToString();
+
+                                //string String = "Комплектующие: \n";
+                                int start = 2;
+                                while (sheet.Cells[start, 1].Value != null)
+                                {
+                                    Component component = new Component();
+
+                                    component.ComponentName = sheet.Cells[start, 1].Text;
+                                    component.ComponentCount = decimal.Parse(sheet.Cells[start, 2].Text);
+                                    component.ComponentPrice = decimal.Parse(sheet.Cells[start, 3].Text);
+                                    product.components.Add(component);
+
+                                    //String = String + ", " + component.ComponentName;
+                                    
+                                    start++;
+                                }
+                                Console.WriteLine(
+                                $"Изделие: {product.ProductName} \n переменный расход: {product.GetPrice()}");
+                                Console.WriteLine(
+                                    $"деталь- {product.GetComponentName()}");                            }
 
                         }
-
-                    }
                         break;
+                }
             }
             Console.ReadLine();
         }
