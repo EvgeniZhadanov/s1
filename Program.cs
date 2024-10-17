@@ -17,8 +17,10 @@ namespace Proba10
                 
                 static void Main(string[] args)
         {
-            //создание папки для файлов, для считывания данных
-            string path = @"C:\Users\Евгений\с1\папка считывания данных для подсчёта";
+            // копирование пути к системной папки
+            string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                        //создание папки для файлов с данными для расчёта
+            string path = Path.Combine(documentsPath, "Папка для загрузки С1");
 
             DirectoryInfo dirInfo = new DirectoryInfo(path);
             if (!dirInfo.Exists)
