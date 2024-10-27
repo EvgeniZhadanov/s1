@@ -17,10 +17,11 @@ namespace Proba10
                 
                 static void Main(string[] args)
         {
-            // копирование пути к системной папки
+             //копирование пути к системной папки
             string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                         //создание папки для файлов с данными для расчёта
-            string path = Path.Combine(documentsPath, "Папка для загрузки С1");
+            string path = Path.Combine(documentsPath, "С1\\отправка данных");
+
 
             DirectoryInfo dirInfo = new DirectoryInfo(path);
             if (!dirInfo.Exists)
@@ -31,15 +32,16 @@ namespace Proba10
             //поиск в папке файла
                 FileInfo[] files = dirInfo.GetFiles();
 
-                foreach (FileInfo file in files)
+            
+            foreach (FileInfo file in files)
                 {
-                    string extension = String.Empty;
-
-                    extension = file.Extension; //присваивание строке расширения файла
-
+                List<string> result = new List<string>();
+                string extension = String.Empty;
+                                     extension = file.Extension; //присваивание строке расширения файла
+                                
                     switch (extension)
                     {
-                        case ".json":
+                                            case ".json":
 
                             string jsonData = File.ReadAllText(file.FullName);
 
@@ -48,12 +50,11 @@ namespace Proba10
                             foreach (Product product in products)
                             {
                                 Console.WriteLine(
-                                    $"Изделие: {product.ProductName} \n переменный расход: {product.GetPrice()}");
-                                foreach (var component in product.components)
-                                {
-                                    Console.WriteLine($"комплектующие: {component.ComponentName}");
-                                }
-                            }
+$"Изделие: {product.ProductName}\nпеременный расход: {product.GetPrice()}\nкомпоненты:\n{product.GetComponentName()}\n");
+
+result.Add($"Изделие: {product.ProductName}\nпеременный расход: {product.GetPrice()}\nкомпоненты:\n{product.GetComponentName()}\n");
+                        }
+                                                       
                             break;
                         case ".xlsx":
 
@@ -75,19 +76,37 @@ namespace Proba10
                                         component.ComponentPrice = decimal.Parse(sheet.Cells[start, 3].Text);
                                         product.components.Add(component);
 
-                                        start++;
+                                    start++;
                                     }
-                                    Console.WriteLine(
-                                    $"Изделие: {product.ProductName} \n переменный расход: {product.GetPrice()}");
-                                    Console.WriteLine(
-                                        $"деталь- {product.GetComponentName()}");
-                                }
+                                
+                                Console.WriteLine(
+                                $"Изделие: {product.ProductName}\nпеременный расход: {product.GetPrice()}\nкомпоненты:\n{product.GetComponentName()}\n");
 
+                                result.Add($"Изделие: {product.ProductName}\nпеременный расход: {product.GetPrice()}\nкомпоненты:\n{product.GetComponentName()}\n");
                             }
+                                                                                        }
                             break;
                     }
+
+                path = Path.Combine(documentsPath, "С1\\получение данных");
+                DirectoryInfo d = new DirectoryInfo(path);
+                if (!d.Exists)
+                {
+                    d.Create();
                 }
-            Console.ReadLine();
+                string dispatchFile = Path.Combine(path, "переменный расход.txt");
+
+                using (StreamWriter writer = new StreamWriter(dispatchFile, false))
+                {
+
+                    foreach (var list in result)
+                    {
+                        writer.WriteLine(list);
+                    }
+                }
+            }
+
+                Console.ReadLine();
         }
     }
 }
