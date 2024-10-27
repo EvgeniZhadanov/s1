@@ -14,16 +14,16 @@ namespace Proba10
 
         public string ProductName { set; get; }
         public List<Component> components = new List<Component>();
-
+        
         public string GetComponentName()
         {
-            List<string> strings = new List<string>();
+            StringBuilder sb = new StringBuilder();
+            
             foreach (var list in components)
             {
-                strings.Add(list.ComponentName);
+                sb.AppendLine( list.ComponentName);
             }
-            return string.Join("\n", strings);
-
+            return sb.ToString();   
         }
         
                 public decimal GetPrice()
